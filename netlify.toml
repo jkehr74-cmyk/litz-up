@@ -1,30 +1,27 @@
 # Netlify configuration for litz-up
 
 [build]
-  command = "npm run build"
+  command = "npm install && npm run build"
   publish = "dist"
-  # Node version to use during build
-  node_builder = "20.x"
 
 [build.environment]
-  # Enable Node.js corepack for better dependency management
+  NODE_VERSION = "20"
+  # Allow peer dependency resolution
   NPM_FLAGS = "--legacy-peer-deps"
 
-# Redirect configuration
+# SPA routing - redirect all requests to index.html for client-side routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# Headers for optimal performance
+# Cache configuration for optimal performance
 [[headers]]
-  for = "/*"
+  for = "/_/assets/*"
   [headers.values]
-    # Cache static assets with hash in filename
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
   for = "/index.html"
   [headers.values]
-    # Don't cache HTML, always check for updates
     Cache-Control = "public, max-age=0, must-revalidate"
